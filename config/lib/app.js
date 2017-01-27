@@ -6,15 +6,18 @@
 var config = require('../config'),
   mongoose = require('./mongoose'),
   express = require('./express'),
-  chalk = require('chalk');
+  chalk = require('chalk'),
+  seed = require('./seed');
+
+function seedDB() {
+  if (config.seedDB && config.seedDB.seed) {
+    console.log(chalk.bold.red('Warning:  Database seeding is turned on'));
+    seed.start();
+  }
+}
 
 // Initialize Models
-mongoose.loadModels();
-
-//SeedDB
-if (config.seedDB) {
-  require('./seed');
-}
+mongoose.loadModels(seedDB);
 
 module.exports.loadModels = function loadModels() {
   mongoose.loadModels();
@@ -46,6 +49,9 @@ module.exports.start = function start(callback) {
       if (process.env.NODE_ENV === 'secure') {
         console.log(chalk.green('HTTPs:\t\t\t\ton'));
       }
+      console.log(chalk.green('App version:\t\t\t' + config.meanjs.version));
+      if (config.meanjs['meanjs-version'])
+        console.log(chalk.green('MEAN.JS version:\t\t\t' + config.meanjs['meanjs-version']));
       console.log('--');
 
       if (callback) callback(app, db, config);

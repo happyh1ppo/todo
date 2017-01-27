@@ -35,3 +35,13 @@ a:hover .header-profile-image {
 .has-error .help-inline.error-text {
   display: inline;
 }
+
+.todo-checkbox {
+  width: 30px;
+  height: 30px;
+}
+
+.todo-input {
+  height: 50px;
+  font-size: 2em;
+}

@@ -1,0 +1,35 @@
+<section ng-controller="TodosController" ng-init="findOne()">
+  <div class="page-header">
+    <h1 ng-bind="todo.title"></h1>
+  </div>
+  <div class="pull-right" ng-show="authentication.user._id == todo.user._id">
+    <a class="btn btn-primary" ui-sref="todos.edit({todoId: todo._id})">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="remove();">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span ng-bind="todo.created | date:'mediumDate'"></span>
+      by
+      <span ng-bind="todo.user.displayName"></span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="todo.content"></p>
+  <div class="form-group">
+    <label for="checkList">Check list</label>
+    <div ng-repeat="element in todo.list" name="checkList" id="checkList" class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="input-group">
+                <span class="input-group-addon todo-input">
+                  <input type="checkbox" ng-model="element.done" class="todo-checkbox">
+                </span>
+          <input type="text" ng-model="element.text" class="form-control todo-input">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

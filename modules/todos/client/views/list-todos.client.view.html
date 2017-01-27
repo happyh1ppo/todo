@@ -1,0 +1,20 @@
+<section ng-controller="TodosController" ng-init="find()">
+  <div class="page-header">
+    <h1>Todos</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="todo in todos" ui-sref="todos.view({todoId: todo._id})" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="todo.created | date:'mediumDate'"></span>
+        by
+        <span ng-bind="todo.user.displayName"></span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="todo.title"></h4>
+      <p class="list-group-item-text" ng-bind="todo.content"></p>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="todos.$resolved && !todos.length">
+    No todos yet, why don't you <a ui-sref="todos.create">create one</a>?
+  </div>
+</section>

@@ -1,0 +1,41 @@
+<section ng-controller="TodosController" ng-init="findOne()" ng-dblclick="doubleClicked()">
+  <div class="page-header">
+    <h1>Edit Todo</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="todoForm" class="form-horizontal" ng-submit="update(todoForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label for="title">Title</label>
+          <input name="title" type="text" ng-model="todo.title" id="title" class="form-control" placeholder="Title" required>
+          <div ng-messages="todoForm.title.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Todo title is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="content">Content</label>
+          <textarea name="content" ng-model="todo.content" id="content" class="form-control" cols="30" rows="10" placeholder="Content"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="checkList">Check list</label>
+          <div ng-repeat="element in todo.list" name="checkList" id="checkList" class="row">
+            <div class="col-md-10 col-md-offset-1">
+              <div class="input-group">
+                <span class="input-group-addon todo-input">
+                  <input type="checkbox" ng-model="element.done" class="todo-checkbox">
+                </span>
+                <input type="text" ng-model="element.text" class="form-control todo-input">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Update" class="btn btn-default">
+        </div>
+        <div ng-show="error" class="text-danger">
+          <strong ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
