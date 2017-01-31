@@ -14,6 +14,10 @@ angular.module('todos').config(['$stateProvider',
         url: '',
         templateUrl: 'modules/todos/client/views/list-todos.client.view.html'
       })
+      .state('todos.list.page', {
+        url: '/page/:pageId',
+        templateUrl: 'modules/todos/client/views/list-todos.client.view.html'
+      })
       .state('todos.create', {
         url: '/create',
         templateUrl: 'modules/todos/client/views/create-todo.client.view.html',

@@ -14,31 +14,35 @@ acl = new acl(new acl.memoryBackend());
 exports.invokeRolesPolicies = function () {
   acl.allow([{
     roles: ['admin'],
-    allows: [{
-      resources: '/api/todos',
-      permissions: '*'
-    }, {
-      resources: '/api/todos/:todoId',
-      permissions: '*'
-    }]
+    allows: [
+      {
+        resources: '/api/todos/count',
+        permissions: ['get']
+      },{
+        resources: '/api/todos',
+        permissions: '*'
+      }, {
+        resources: '/api/todos/:todoId',
+        permissions: '*'
+      }
+    ]
   }, {
     roles: ['user'],
-    allows: [{
-      resources: '/api/todos',
-      permissions: ['get', 'post']
-    }, {
-      resources: '/api/todos/:todoId',
-      permissions: ['get']
-    }]
-  }, {
-    roles: ['guest'],
-    allows: [{
-      resources: '/api/todos',
-      permissions: ['get']
-    }, {
-      resources: '/api/todos/:todoId',
-      permissions: ['get']
-    }]
+    allows: [
+      {
+        resources: '/api/todos/count',
+        permissions: ['get']
+      }, {
+        resources: '/api/todos/page/:pageId',
+        permissions: ['get']
+      }, {
+        resources: '/api/todos',
+        permissions: ['get', 'post']
+      }, {
+        resources: '/api/todos/:todoId',
+        permissions: ['get']
+      }
+    ]
   }]);
 };
 

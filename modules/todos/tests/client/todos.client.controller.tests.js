@@ -53,7 +53,7 @@
       mockTodo = new Todos({
         _id: '525a8422f6d0f87f0e407a33',
         title: 'An Todo about MEAN',
-        content: 'MEAN rocks!'
+        description: 'MEAN rocks!'
       });
 
       // Mock logged in user
@@ -104,12 +104,12 @@
         // Create a sample todo object
         sampleTodoPostData = new Todos({
           title: 'An Todo about MEAN',
-          content: 'MEAN rocks!'
+          description: 'MEAN rocks!'
         });
 
         // Fixture mock form input values
         scope.title = 'An Todo about MEAN';
-        scope.content = 'MEAN rocks!';
+        scope.description = 'MEAN rocks!';
 
         spyOn($location, 'path');
       });
@@ -124,7 +124,7 @@
 
         // Test form inputs are reset
         expect(scope.title).toEqual('');
-        expect(scope.content).toEqual('');
+        expect(scope.description).toEqual('');
 
         // Test URL redirection after the todo was created
         expect($location.path.calls.mostRecent().args[0]).toBe('todos/' + mockTodo._id);

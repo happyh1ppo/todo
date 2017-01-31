@@ -6,7 +6,9 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Todo = mongoose.model('Todo'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+  config = require(path.resolve('./config/config')),
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  _ = require('lodash');
 
 /**
  * Create a todo
@@ -40,7 +42,7 @@ exports.update = function (req, res) {
   var todo = req.todo;
 
   todo.title = req.body.title;
-  todo.content = req.body.content;
+  todo.description = req.body.description;
 
   todo.save(function (err) {
     if (err) {
@@ -73,16 +75,67 @@ exports.delete = function (req, res) {
 /**
  * List of Todos
  */
-exports.list = function (req, res) {
-  Todo.find({ user: req.user._id }).sort('-created').populate('user', 'displayName').exec(function (err, todos) {
+
+exports.count = function(req, res) {
+  var user = _.get(req, 'user._id') || _.get(req, 'profile._id');
+  Todo.count({ user: user }).exec(function (err, count) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(todos);
+      res.json(count);
     }
   });
+};
+
+exports.list = function (req, res) {
+  var page = req.query.pageId || 0,
+      user = _.get(req, 'user._id') || _.get(req, 'profile._id');
+  console.log(user);
+
+  new Promise(function(resolve, reject) {
+
+  });
+
+  Promise.resolve()
+      .then(function() {
+        return new Promise(function(resolve, reject) {
+          Todo.count({ user: user }).exec(function (err, count) {
+            if (err) {
+              //return res.status(400).send({
+              //  message: errorHandler.getErrorMessage(err)
+              //});
+              reject(err);
+            } else {
+              //res.json(count);
+              resolve(count);
+            }
+          });
+        });
+      })
+      .then(function(count) {
+        Todo.find({ user: user })
+            .skip(config.PAGE_SIZE * page)
+            .limit(config.PAGE_SIZE)
+            .sort('-created')
+            .populate('user', 'displayName')
+            .exec(function (err, todos) {
+              if (err) {
+                //return res.status(400).send({
+                //  message: errorHandler.getErrorMessage(err)
+                //});
+                return Promise.reject(err);
+              } else {
+                res.json(todos);
+              }
+            });
+      })
+      .catch(function(err) {
+        res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      })
 };
 
 /**
@@ -107,4 +160,9 @@ exports.todoByID = function (req, res, next, id) {
     req.todo = todo;
     next();
   });
+};
+
+exports.pageId = function (req, res, next, page) {
+    req.pageId = page;
+    next();
 };

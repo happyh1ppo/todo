@@ -1,8 +1,9 @@
 'use strict';
 
 // Todos controller
-angular.module('todos').controller('TodosController', ['$scope', '$stateParams', '$location', 'Authentication', 'Todos',
-  function ($scope, $stateParams, $location, Authentication, Todos) {
+angular.module('todos').controller('TodosController', ['$scope', '$rootScope', '$stateParams', '$location', '$http', 'Authentication', 'Todos',
+  function ($scope, $rootScope, $stateParams, $location, $http, Authentication, Todos) {
+    var config = $rootScope.config;
     $scope.authentication = Authentication;
     $scope.user = $scope.authentication.user;
     $scope.list = [];
@@ -20,7 +21,7 @@ angular.module('todos').controller('TodosController', ['$scope', '$stateParams',
       // Create new Todo object
       var todo = new Todos({
         title: this.title,
-        content: this.content,
+        description: this.description,
         list: this.list
       });
 
@@ -30,7 +31,7 @@ angular.module('todos').controller('TodosController', ['$scope', '$stateParams',
 
         // Clear form fields
         $scope.title = '';
-        $scope.content = '';
+        $scope.description = '';
         $scope.list = [];
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
@@ -75,19 +76,30 @@ angular.module('todos').controller('TodosController', ['$scope', '$stateParams',
 
     // Find a list of Todos
     $scope.find = function () {
-      $scope.todos = Todos.query({} , { user: $scope.user.id });
+      console.log('api/todos/count');
+      //$http.get("api/todos/count")
+      //    .then(function(response) {
+      //      $scope.test = response;
+      //      console.log('data :', response.data);
+      //      console.log('status :', response.status);
+      //      console.log('headers :', response.headers());
+      //    },function(err) {
+      //      console.log('error! :', err);
+      //    });
+      //$scope.count = response;
+
+      $scope.todos = Todos.query({
+        //pageId: $stateParams.pageId
+      });
+    };
+
+    // Decide either to show pagination block or not
+    $scope.showPagination = function() {
+      return $scope.todos.$resolved && $scope.todos.length > config.PAGE_SIZE;
     };
 
     // Find existing Todo
     $scope.findOne = function () {
-      //Todos.get({
-      //  todoId: $stateParams.todoId
-      //}).exec(function (err, todo) {
-      //  if (err)
-      //    $scope.error = err.data.message;
-      //  $scope.todo = todo;
-      //});
-      console.log(Todos.get);
       $scope.todo = Todos.get({
         todoId: $stateParams.todoId
       });
@@ -95,13 +107,13 @@ angular.module('todos').controller('TodosController', ['$scope', '$stateParams',
 
     // Init function
     $scope.init = function () {
-      //console.log("Test");
+      //test
     };
 
     // Handle keyboard events
     $scope.keyPressed = function (event) {
       if (event.which === 13) {
-        alert('works!');
+        alert('keyboard event works!');
       }
     };
 

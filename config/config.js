@@ -212,6 +212,8 @@ var initGlobalConfig = function () {
     validateSessionSecret: validateSessionSecret
   };
 
+  config.PAGE_SIZE = 5;
+
   return config;
 };
 

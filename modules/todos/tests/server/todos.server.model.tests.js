@@ -31,7 +31,7 @@ describe('Todo Model Unit Tests:', function () {
     user.save(function () {
       todo = new Todo({
         title: 'Todo Title',
-        content: 'Todo Content',
+        description: 'Todo Description',
         user: user
       });
 

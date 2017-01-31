@@ -48,7 +48,7 @@ describe('Todo CRUD tests', function () {
     user.save(function () {
       todo = {
         title: 'Todo Title',
-        content: 'Todo Content'
+        description: 'Todo Content'
       };
 
       done();

@@ -20,10 +20,9 @@ var TodoSchema = new Schema({
     trim: true,
     required: 'Title cannot be blank'
   },
-  content: {
+  description: {
     type: String,
     default: '',
-    trim: true
   },
   list: [{
     text: String,
