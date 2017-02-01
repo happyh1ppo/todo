@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 var todosPolicy = require('../policies/todos.server.policy'),
-    todos = require('../controllers/todos.server.controller'),
-    users = require('../../../users/server/controllers/users.server.controller');
+  todos = require('../controllers/todos.server.controller'),
+  users = require('../../../users/server/controllers/users.server.controller');
 
 module.exports = function (app) {
   // Todos collection routes

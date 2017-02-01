@@ -91,12 +91,10 @@ exports.count = function(req, res) {
 
 exports.list = function (req, res) {
   var page = req.query.pageId || 0,
-      user = _.get(req, 'user._id') || _.get(req, 'profile._id');
-  console.log(user);
+    user = _.get(req, 'user._id') || _.get(req, 'profile._id');
+  console.log(user.role);
 
-  new Promise(function(resolve, reject) {
-
-  });
+  
 
   Promise.resolve()
       .then(function() {
@@ -135,7 +133,7 @@ exports.list = function (req, res) {
         res.status(400).send({
           message: errorHandler.getErrorMessage(err)
         });
-      })
+      });
 };
 
 /**
@@ -163,6 +161,6 @@ exports.todoByID = function (req, res, next, id) {
 };
 
 exports.pageId = function (req, res, next, page) {
-    req.pageId = page;
-    next();
+  req.pageId = page;
+  next();
 };

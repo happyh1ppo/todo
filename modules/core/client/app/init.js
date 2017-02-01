@@ -58,7 +58,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).run(function ($ro
   // Config
   $rootScope.config = {
     PAGE_SIZE: 5
-  }
+  };
 });
 
 //Then define the init function for starting up the application
