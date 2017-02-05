@@ -1,39 +1,61 @@
-<section ng-controller="TodosController" ng-init="findOne()" ng-dblclick="doubleClicked()">
+<section ng-controller="TodosController" ng-init="findOne()">
   <div class="page-header">
     <h1>Edit Todo</h1>
   </div>
   <div class="col-md-12">
     <form name="todoForm" class="form-horizontal" ng-submit="update(todoForm.$valid)" novalidate>
       <fieldset>
-        <div class="form-group" show-errors>
-          <label for="title">Title</label>
-          <input name="title" type="text" ng-model="todo.title" id="title" class="form-control" placeholder="Title" required>
-          <div ng-messages="todoForm.title.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Todo title is required.</p>
+        <div id="editArea" class="well" ng-click="clicked($event)">
+          <div class="form-group row-indenting" show-errors>
+            <label for="title">Title</label>
+            <input name="title" type="text" ng-model="todo.title" id="title" class="form-control" placeholder="Title" required>
+            <div ng-messages="todoForm.title.$error" role="alert">
+              <p class="help-block error-text" ng-message="required">Todo title is required.</p>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea name="description" ng-model="todo.description" id="description" class="form-control" cols="10" rows="5" placeholder="Description (optional)"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="checkList">Check list</label>
-          <div ng-repeat="element in todo.list" name="checkList" id="checkList" class="row">
-            <div class="col-md-10 col-md-offset-1">
-              <div class="input-group">
-                <span class="input-group-addon todo-input">
-                  <input type="checkbox" ng-model="element.done" class="todo-checkbox">
-                </span>
-                <input type="text" ng-model="element.text" class="form-control todo-input">
+          <div class="form-group row-indenting">
+            <label for="description">Description</label>
+            <textarea name="description" ng-model="todo.description" id="description" class="form-control" cols="10" rows="3" placeholder="Description (optional)"></textarea>
+          </div>
+          <div class="form-group row-indenting">
+            <label>Check list</label>
+            <div ng-repeat="element in todoList" name="checkList" class="row indent-top">
+              <div class="col-md-12">
+                <div class="input-group" ng-click="startEdit($index)">
+                  <a class="input-group-addon todo-list-elem" ng-click="checkDone($index)">
+                    <i ng-class="{'glyphicon glyphicon-ok todo-done' : element.done, 'glyphicon glyphicon-unchecked' : !element.done}"></i>
+                  </a>
+
+                  <input type="text" ng-disabled="editing !== $index" ng-model="element.text" ng-class="{'form-control todo-input' : !element.done, 'form-control todo-input todo-input-done' : element.done}">
+
+                  <a class="btn btn-xs input-group-addon" ng-show="editing === $index" ng-click="deleteListItem($index)">
+                    <i class="glyphicon glyphicon-remove"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="row indent-top">
+              <div class="col-md-4">
+                <button type="button" class="btn btn-default" ng-click="addNewListElement()" title="Add new list item">
+                  <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <a class="indent-horizontal" ng-click="checkAllItems()" ng-class="{'disabled-link' : !todoList.length}">Check all</a>
+                <a class="indent-horizontal" ng-click="uncheckAllItems()" ng-class="{'disabled-link' : !todoList.length}">Uncheck all</a>
+              </div>
+              <div class="col-md-4">
+
               </div>
             </div>
           </div>
-        </div>
-        <div class="form-group">
-          <input type="submit" value="Update" class="btn btn-default">
-        </div>
-        <div ng-show="error" class="text-danger">
-          <strong ng-bind="error"></strong>
+          <div class="form-group row-indenting">
+            <input type="submit" value="Update" class="btn btn-default pull-right" title="Click to submit">
+            <button type="button" ui-sref="todos.view({todoId: todo._id})" class="btn btn-default pull-right indent-horizontal" title="Go back">
+              Cancel
+            </button>
+          </div>
+          <div ng-show="error" class="text-danger">
+            <strong ng-bind="error"></strong>
+          </div>
         </div>
       </fieldset>
     </form>

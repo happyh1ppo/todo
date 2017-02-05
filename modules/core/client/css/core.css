@@ -36,12 +36,43 @@ a:hover .header-profile-image {
   display: inline;
 }
 
-.todo-checkbox {
-  width: 30px;
-  height: 30px;
+.well {
+  background: rgba(249, 249, 249, 0.41);
+}
+
+.row-indenting {
+  padding: 15px 15px 0;
+  margin-bottom: 0;
+}
+.indent-top {
+  margin-top: 7px;
+}
+
+.indent-horizontal {
+  margin: 0 7px;
+}
+
+.todo-done {
+  color: #56be01;
 }
 
 .todo-input {
   height: 50px;
   font-size: 2em;
+  cursor: default !important;
+}
+
+.todo-input-done {
+  background-color: rgba(210, 230, 210, 0.85) !important;
+}
+
+.todo-list-elem {
+  font-size: 1.5em;
+}
+
+.disabled-link {
+  color: #AAA;
+  cursor: default;
+  pointer-events: none;
+  text-decoration: none;
 }

@@ -1,35 +1,42 @@
-<section ng-controller="TodosController" ng-init="findOne()">
+<section ng-controller="TodosController" ng-init="findOne()" ng-dblclick="doubleClicked(todo._id)">
   <div class="page-header">
     <h1 ng-bind="todo.title"></h1>
   </div>
-  <div class="pull-right" ng-show="authentication.user._id == todo.user._id">
-    <a class="btn btn-primary" ui-sref="todos.edit({todoId: todo._id})">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" ng-click="remove();">
-      <i class="glyphicon glyphicon-trash"></i>
-    </a>
-  </div>
-  <small>
-    <em class="text-muted">
-      Posted on
-      <span ng-bind="todo.created | date:'mediumDate'"></span>
-      by
-      <span ng-bind="todo.user.displayName"></span>
-    </em>
-  </small>
-  <p class="lead" ng-bind="todo.description"></p>
-  <div class="form-group">
-    <label for="checkList">Check list</label>
-    <div ng-repeat="element in todo.list" name="checkList" id="checkList" class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <div class="input-group">
-                <span class="input-group-addon todo-input">
-                  <input type="checkbox" ng-model="element.done" class="todo-checkbox">
-                </span>
-          <input type="text" ng-model="element.text" class="form-control todo-input">
+  <div class="well" title="Double click to edit">
+    <div class="pull-right" ng-show="authentication.user._id == todo.user._id">
+      <a class="btn btn-primary" ui-sref="todos.edit({todoId: todo._id})" title="Edit todo">
+        <i class="glyphicon glyphicon-edit"></i>
+      </a>
+      <a class="btn btn-primary" ng-click="remove();" title="Remove todo">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+    </div>
+    <small>
+      <em class="text-muted">
+        Posted on
+        <span ng-bind="todo.created | date:'mediumDate'"></span>
+        by
+        <span ng-bind="todo.user.displayName"></span>
+      </em>
+    </small>
+    <p class="lead" ng-bind="todo.description"></p>
+    <p class="lead">
+      <div ng-repeat="element in todoList" class="row indent-top">
+        <div class="col-md-12">
+          <div class="input-group">
+            <a class="input-group-addon todo-list-elem">
+              <i ng-class="{'glyphicon glyphicon-ok todo-done' : element.done, 'glyphicon glyphicon-unchecked' : !element.done}"></i>
+            </a>
+
+            <input type="text" ng-disabled="true" ng-model="element.text" ng-class="{'form-control todo-input' : !element.done, 'form-control todo-input todo-input-done' : element.done}">
+          </div>
         </div>
       </div>
+    </p>
+    <div class="row row-indenting">
+      <button type="button" ui-sref="todos.list" class="btn btn-default" title="Go back">
+        Back
+      </button>
     </div>
   </div>
 </section>

@@ -6,7 +6,7 @@ angular.module('todos').controller('TodosController', ['$scope', '$rootScope', '
     var config = $rootScope.config;
     $scope.authentication = Authentication;
     $scope.user = $scope.authentication.user;
-    $scope.list = [];
+    $scope.todoList = [];
 
     // Create new Todo
     $scope.create = function (isValid) {
@@ -22,7 +22,7 @@ angular.module('todos').controller('TodosController', ['$scope', '$rootScope', '
       var todo = new Todos({
         title: this.title,
         description: this.description,
-        list: this.list
+        list: $scope.todoList
       });
 
       // Redirect after save
@@ -32,7 +32,7 @@ angular.module('todos').controller('TodosController', ['$scope', '$rootScope', '
         // Clear form fields
         $scope.title = '';
         $scope.description = '';
-        $scope.list = [];
+        $scope.todoList = [];
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -66,6 +66,7 @@ angular.module('todos').controller('TodosController', ['$scope', '$rootScope', '
       }
 
       var todo = $scope.todo;
+      todo.list = $scope.todoList;
 
       todo.$update(function () {
         $location.path('todos/' + todo._id);
@@ -100,8 +101,12 @@ angular.module('todos').controller('TodosController', ['$scope', '$rootScope', '
 
     // Find existing Todo
     $scope.findOne = function () {
-      $scope.todo = Todos.get({
+      Todos.get({
         todoId: $stateParams.todoId
+      })
+      .$promise.then(function (todo) {
+        $scope.todo = todo;
+        $scope.todoList = todo.list;
       });
     };
 
@@ -118,22 +123,89 @@ angular.module('todos').controller('TodosController', ['$scope', '$rootScope', '
     };
 
     // Handle mouse events
-    $scope.doubleClicked = function (event) {
-      //alert('works!');
-      $scope.addNewListElement();
+    $scope.doubleClicked = function (id) {
+      $location.path('todos/' + id + '/edit');
     };
 
+    $scope.clicked = function (e) {
+      var i,
+        found = false,
+        length = e.target.classList.length;
+      if (length) {
+        for (i = 0; i < length; i++) {
+          if (e.target.classList[i] === 'todo-input') {
+            found = true;
+            break;
+          }
+        }
+        if (found) {
+          return;
+        }
+      }
+      // if clicked non-input element - hide editing
+      $scope.editing = -1;
+    };
+
+    // Add new todo list item
     $scope.addNewListElement = function () {
+      // if the last item is empty then do nothing
+      var length = $scope.todoList.length;
+      if (length && $scope.todoList[length - 1].text === '') {
+        return;
+      }
+
       var newElement = {
         text: '',
         done: false
       };
 
-      if ($scope.todo && $scope.todo.list) {
-        $scope.todo.list.push(newElement);
+      $scope.todoList.push(newElement);
+      $scope.editing = $scope.todoList.length - 1;
+    };
+
+    // Mark todo list item as Done/Undone
+    $scope.checkDone = function (index) {
+      if ($scope.todoList[index]) {
+        var element = $scope.todoList[index];
+        element.done = !element.done;
       }
-      else {
-        $scope.list.push(newElement);
+    };
+
+    // Edit todo list item
+    $scope.startEdit = function (index) {
+      if ($scope.todoList[index]) {
+        $scope.editing = index;
+      }
+    };
+
+    // Delete todo list item
+    $scope.deleteListItem = function (index) {
+      if ($scope.todoList[index]) {
+        $scope.todoList.splice(index, 1);
+      }
+    };
+
+    // Check all list items
+    $scope.checkAllItems = function () {
+      var i,
+        length = $scope.todoList.length;
+
+      if (length) {
+        for (i = 0; i < length; i++) {
+          $scope.todoList[i].done = true;
+        }
+      }
+    };
+
+    // Uncheck all list items
+    $scope.uncheckAllItems = function () {
+      var i,
+        length = $scope.todoList.length;
+
+      if (length) {
+        for (i = 0; i < length; i++) {
+          $scope.todoList[i].done = false;
+        }
       }
     };
   }

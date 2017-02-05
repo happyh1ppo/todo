@@ -43,6 +43,7 @@ exports.update = function (req, res) {
 
   todo.title = req.body.title;
   todo.description = req.body.description;
+  todo.list = req.body.list;
 
   todo.save(function (err) {
     if (err) {
